@@ -1,7 +1,8 @@
 const db = require("../data/dbConfig.js");
 module.exports = {
   getAll,
-  insert
+  insert,
+  deleteIt
 };
 
 function getAll() {
@@ -13,4 +14,10 @@ async function insert(tarot) {
   return db("tarot")
     .where({ id })
     .first();
+}
+
+function deleteIt(id) {
+  return db("tarot")
+    .where("id", id)
+    .del();
 }

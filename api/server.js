@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAll, insert } = require("../tarot/tarotModel.js");
+const { getAll, insert, deleteIt } = require("../tarot/tarotModel.js");
 const server = express();
 server.use(express.json());
 
@@ -25,6 +25,17 @@ server.post("/tarot", (req, res) => {
     })
     .catch(error => {
       res.status(500).json({ error: "could not add tarot" });
+    });
+});
+
+server.delete("/tarot/:id", (req, res) => {
+  const id = req.params.id;
+  deleteIt(id)
+    .then(tarot => {
+      res.status(200).json({ message: "Successfully deleted" });
+    })
+    .catch(error => {
+      res.status(500).json({ error: "Could not delete from server" });
     });
 });
 

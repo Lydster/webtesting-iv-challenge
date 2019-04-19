@@ -1,5 +1,5 @@
 const express = require("express");
-const tarotCards = require("../tarot/tarotModel.js");
+const { getAll, insert } = require("../tarot/tarotModel.js");
 const server = express();
 server.use(express.json());
 
@@ -8,8 +8,24 @@ server.get("/", async (req, res) => {
 });
 
 server.get("/tarot", async (req, res) => {
-  const rows = await tarotCards.getAll();
-  res.status(200).json(rows);
+  getAll()
+    .then(tarot => {
+      res.status(200).json(tarot);
+    })
+    .catch(error => {
+      res.status(500).json({ error: "could not get tarot" });
+    });
+});
+
+server.post("/tarot", (req, res) => {
+  const { name, description } = req.body;
+  insert({ name, description })
+    .then(tarot => {
+      res.status(200).json(tarot);
+    })
+    .catch(error => {
+      res.status(500).json({ error: "could not add tarot" });
+    });
 });
 
 module.exports = server;
